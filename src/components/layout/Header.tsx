@@ -1,4 +1,5 @@
-import { Bell, User } from "lucide-react";
+import { Bell } from "lucide-react";
+import { UserButton } from "@clerk/clerk-react";
 import { useHealth } from "@/hooks/useDashboardMetrics";
 import { cn } from "@/lib/utils";
 
@@ -24,9 +25,7 @@ export function Header() {
                 <button className="text-muted-foreground hover:text-foreground">
                     <Bell className="h-5 w-5" />
                 </button>
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <User className="h-5 w-5 text-primary" />
-                </div>
+                <UserButton />
             </div>
         </header>
     );
