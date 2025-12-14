@@ -144,3 +144,10 @@ export interface TransactionVolumeTimeSeriesResponse {
     average_per_hour: number;
 }
 
+export interface ResolveAlertRequest {
+    alert_id: number;
+    resolved_by: string;
+    resolution_steps: string[];
+    root_cause: string;
+}
+

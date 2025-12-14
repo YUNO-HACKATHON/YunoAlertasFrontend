@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { alertsAPI } from "../api/endpoints";
+import { alertsAPI, incidentsAPI } from "../api/endpoints";
 import type { AlertStatus, Severity } from "../api/types";
+import toast from "react-hot-toast";
 
 interface UseAlertsParams {
     page?: number;
@@ -35,6 +36,29 @@ export const useUpdateAlertStatus = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["alerts"] });
             queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
+        },
+    });
+};
+
+export const useResolveAlert = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: incidentsAPI.resolve,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["alerts"] });
+            queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
+        },
+    });
+};
+
+export const useAssignAlert = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ alertId, userId }: { alertId: number; userId: number }) =>
+            alertsAPI.assign(alertId, userId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["alerts"] });
+            toast.success("Investigation started and assigned successfully");
         },
     });
 };

@@ -1,4 +1,3 @@
-import { Bell } from "lucide-react";
 import { UserButton } from "@clerk/clerk-react";
 import { useHealth } from "@/hooks/useDashboardMetrics";
 import { cn } from "@/lib/utils";
@@ -22,9 +21,6 @@ export function Header() {
                 </div>
             </div>
             <div className="flex items-center space-x-4">
-                <button className="text-muted-foreground hover:text-foreground">
-                    <Bell className="h-5 w-5" />
-                </button>
                 <UserButton />
             </div>
         </header>

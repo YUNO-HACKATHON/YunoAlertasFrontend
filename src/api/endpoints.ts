@@ -9,7 +9,8 @@ import type {
     ProviderStatusListResponse,
     MerchantStatusListResponse,
     ErrorRateTimeSeriesResponse,
-    TransactionVolumeTimeSeriesResponse
+    TransactionVolumeTimeSeriesResponse,
+    ResolveAlertRequest
 } from "./types";
 
 export const alertsAPI = {
@@ -19,6 +20,8 @@ export const alertsAPI = {
     // We might need to adjust the UI to use that instead of a generic status update
     updateStatus: (id: number, status: string) =>
         apiClient.patch<any, { message: string; alert: Alert }>(`/anomalies/${id}/status`, { status }),
+    assign: (alertId: number, userId: number) =>
+        apiClient.post<any, { message: string }>(`/anomalies/${alertId}/assign`, { user_id: userId }),
 };
 
 export const anomaliesAPI = {
@@ -32,7 +35,7 @@ export const incidentsAPI = {
     getAll: (params?: any) =>
         apiClient.get<any, PaginatedIncidentsResponse<Incident>>("/incidents", { params }),
     getById: (id: number) => apiClient.get<any, Incident>(`/incidents/${id}`),
-    resolve: (data: { alert_id: number; resolved_by: string; resolution_steps: string[]; root_cause: string }) =>
+    resolve: (data: ResolveAlertRequest) =>
         apiClient.post<any, { incident_id: number; message: string }>("/incidents/resolve", data),
 };
 
