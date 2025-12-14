@@ -78,14 +78,14 @@ export function IncidentsTable() {
                                     Loading...
                                 </TableCell>
                             </TableRow>
-                        ) : data?.data.length === 0 ? (
+                        ) : data?.incidents.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={7} className="text-center">
                                     No incidents found
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            data?.data.map((incident) => (
+                            data?.incidents.map((incident) => (
                                 <TableRow
                                     key={incident.incident_id}
                                     className="cursor-pointer hover:bg-muted/50"

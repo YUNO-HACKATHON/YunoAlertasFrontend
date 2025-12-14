@@ -3,7 +3,7 @@ import type { Alert, Anomaly, Incident, DashboardMetrics } from "./types";
 export const mockAlerts: Alert[] = [
     {
         alert_id: 101,
-        error_pattern: "High Decline Rate - Insufficient Funds",
+        error_pattern: "High Decline Rate",
         entity_type: "provider",
         entity_id: "Stripe",
         severity: "critical",
@@ -82,7 +82,7 @@ export const mockDashboardMetrics: DashboardMetrics = {
     total_alerts: 12,
     active_alerts: 3,
     critical_alerts: 1,
-    avg_error_rate: 3.5,
+    average_error_rate: 3.5,
     total_transactions_24h: 15000,
     alerts_by_severity: {
         critical: 1,

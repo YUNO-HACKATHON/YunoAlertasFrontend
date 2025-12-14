@@ -52,7 +52,7 @@ export interface DashboardMetrics {
     total_alerts: number;
     active_alerts: number;
     critical_alerts: number;
-    avg_error_rate: number;
+    average_error_rate: number;
     total_transactions_24h: number;
     alerts_by_severity: Record<Severity, number>;
     top_providers_with_issues: {
@@ -68,3 +68,79 @@ export interface PaginatedResponse<T> {
     page: number;
     page_size: number;
 }
+
+export interface PaginatedIncidentsResponse<T> {
+    incidents: T[];
+    total: number;
+    page: number;
+    page_size: number;
+}
+
+export interface PaginatedAlertsResponse<T> {
+    alerts: T[];
+    total: number;
+    page: number;
+    page_size: number;
+}
+
+// Analytics Types
+
+// Provider Status
+export interface ProviderStatus {
+    provider_id: string;
+    country_code: string | null;
+    total_transactions: number;
+    declined_transactions: number;
+    error_rate: number;
+    last_updated: string;
+}
+
+export interface ProviderStatusListResponse {
+    providers: ProviderStatus[];
+    total_providers: number;
+}
+
+// Merchant Status
+export interface MerchantStatus {
+    merchant_id: string;
+    country_code: string | null;
+    total_transactions: number;
+    declined_transactions: number;
+    error_rate: number;
+    last_updated: string;
+}
+
+export interface MerchantStatusListResponse {
+    merchants: MerchantStatus[];
+    total_merchants: number;
+}
+
+// Error Rate Time Series
+export interface HourlyErrorRate {
+    hour: string;
+    total_transactions: number;
+    declined_transactions: number;
+    error_rate: number;
+}
+
+export interface ErrorRateTimeSeriesResponse {
+    country_code: string | null;
+    hours: number;
+    data_points: HourlyErrorRate[];
+    average_error_rate: number;
+}
+
+// Transaction Volume Time Series
+export interface HourlyTransactionVolume {
+    hour: string;
+    transaction_count: number;
+}
+
+export interface TransactionVolumeTimeSeriesResponse {
+    country_code: string | null;
+    hours: number;
+    data_points: HourlyTransactionVolume[];
+    total_transactions: number;
+    average_per_hour: number;
+}
+

@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, AlertTriangle, Activity, BookOpen } from "lucide-react";
+import { AlertTriangle, Activity, BookOpen, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-    { name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { name: "Analytics", href: "/", icon: BarChart3 },
     { name: "Alerts", href: "/alerts", icon: AlertTriangle },
     { name: "Anomalies", href: "/anomalies", icon: Activity },
     { name: "Incidents", href: "/incidents", icon: BookOpen },

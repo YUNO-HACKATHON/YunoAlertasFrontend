@@ -2,10 +2,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import { Layout } from "./components/layout/Layout";
-import Dashboard from "./pages/Dashboard";
 import Alerts from "./pages/Alerts";
 import Anomalies from "./pages/Anomalies";
 import Incidents from "./pages/Incidents";
+import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
 import { SignedIn, SignedOut, RedirectToSignIn, SignIn, SignUp } from "@clerk/clerk-react";
@@ -40,10 +40,11 @@ function App() {
                 <SignedIn>
                   <Routes>
                     <Route path="/" element={<Layout />}>
-                      <Route index element={<Dashboard />} />
+                      <Route index element={<Analytics />} />
                       <Route path="alerts" element={<Alerts />} />
                       <Route path="anomalies" element={<Anomalies />} />
                       <Route path="incidents" element={<Incidents />} />
+                      <Route path="analytics" element={<Analytics />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
                   </Routes>

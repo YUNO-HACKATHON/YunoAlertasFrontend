@@ -1,43 +1,57 @@
-import { mockAlerts, mockAnomalies, mockIncidents, mockDashboardMetrics, mockHealth } from "./mockData";
-import type { Alert, Incident, DashboardMetrics, PaginatedResponse } from "./types";
-
-// Helper to simulate network delay
-const delay = <T>(data: T, ms = 500): Promise<T> =>
-    new Promise((resolve) => setTimeout(() => resolve(data), ms));
+import apiClient from "./client";
+import type {
+    Alert,
+    Anomaly,
+    Incident,
+    DashboardMetrics,
+    PaginatedAlertsResponse,
+    PaginatedIncidentsResponse,
+    ProviderStatusListResponse,
+    MerchantStatusListResponse,
+    ErrorRateTimeSeriesResponse,
+    TransactionVolumeTimeSeriesResponse
+} from "./types";
 
 export const alertsAPI = {
-    getAll: (params?: any) => delay<PaginatedResponse<Alert>>({
-        data: mockAlerts,
-        total: mockAlerts.length,
-        page: params?.page || 1,
-        page_size: params?.page_size || 20
-    }),
-    getById: (id: number) => delay<Alert>(mockAlerts.find(a => a.alert_id === id) || mockAlerts[0]),
-    updateStatus: (id: number, status: string) => {
-        const alert = mockAlerts.find(a => a.alert_id === id);
-        if (alert) alert.status = status as any;
-        return delay({ message: "Status updated", alert: alert! });
-    },
+    getAll: (params?: any) => apiClient.get<any, PaginatedAlertsResponse<Alert>>("/anomalies", { params }),
+    getById: (id: number) => apiClient.get<any, Alert>(`/anomalies/${id}`),
+    // Note: The backend currently only supports resolving incidents via POST /incidents/resolve
+    // We might need to adjust the UI to use that instead of a generic status update
+    updateStatus: (id: number, status: string) =>
+        apiClient.patch<any, { message: string; alert: Alert }>(`/anomalies/${id}/status`, { status }),
 };
 
 export const anomaliesAPI = {
-    check: (_timeWindow: number) => delay({
-        anomalies: mockAnomalies,
-        timestamp: new Date().toISOString()
-    }),
+    check: (timeWindow: number) =>
+        apiClient.post<any, { anomalies: Anomaly[]; timestamp: string }>("/anomalies/check", {
+            time_window_minutes: timeWindow,
+        }),
 };
 
 export const incidentsAPI = {
-    getAll: (params?: any) => delay<PaginatedResponse<Incident>>({
-        data: mockIncidents,
-        total: mockIncidents.length,
-        page: params?.page || 1,
-        page_size: params?.page_size || 20
-    }),
-    getById: (id: number) => delay<Incident>(mockIncidents.find(i => i.incident_id === id) || mockIncidents[0]),
+    getAll: (params?: any) =>
+        apiClient.get<any, PaginatedIncidentsResponse<Incident>>("/incidents", { params }),
+    getById: (id: number) => apiClient.get<any, Incident>(`/incidents/${id}`),
+    resolve: (data: { alert_id: number; resolved_by: string; resolution_steps: string[]; root_cause: string }) =>
+        apiClient.post<any, { incident_id: number; message: string }>("/incidents/resolve", data),
 };
 
 export const dashboardAPI = {
-    getMetrics: () => delay<DashboardMetrics>(mockDashboardMetrics),
-    getHealth: () => delay(mockHealth),
+    getMetrics: () => apiClient.get<any, DashboardMetrics>("/dashboard/metrics"),
+    getHealth: () => apiClient.get<any, { status: string; timestamp: string; database_connected: boolean }>("/health"),
 };
+
+export const analyticsAPI = {
+    getProviderStatus: (params?: { country_code?: string; hours?: number }) =>
+        apiClient.get<any, ProviderStatusListResponse>("/providers/status", { params }),
+
+    getMerchantStatus: (params?: { country_code?: string; hours?: number }) =>
+        apiClient.get<any, MerchantStatusListResponse>("/merchants/status", { params }),
+
+    getErrorRateTimeSeries: (params?: { country_code?: string; hours?: number }) =>
+        apiClient.get<any, ErrorRateTimeSeriesResponse>("/analytics/error-rate-timeseries", { params }),
+
+    getTransactionVolumeTimeSeries: (params?: { country_code?: string; hours?: number }) =>
+        apiClient.get<any, TransactionVolumeTimeSeriesResponse>("/analytics/transaction-volume-timeseries", { params }),
+};
+

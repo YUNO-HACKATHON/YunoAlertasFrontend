@@ -32,16 +32,12 @@ export default function Dashboard() {
                     title="Active Alerts"
                     value={metrics?.active_alerts || 0}
                     icon={Activity}
-                    trend="down"
-                    trendValue="-2"
-                    description="Since last hour"
+                    description="Since last 24 hours"
                 />
                 <MetricsCard
                     title="Avg Error Rate"
-                    value={`${metrics?.avg_error_rate || 0}%`}
+                    value={`${metrics?.average_error_rate || 0}%`}
                     icon={CheckCircle}
-                    trend={metrics?.avg_error_rate && metrics.avg_error_rate > 5 ? "down" : "up"}
-                    trendValue="+0.5%"
                     description="Global error rate"
                 />
                 <MetricsCard

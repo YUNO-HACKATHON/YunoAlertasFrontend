@@ -25,7 +25,7 @@ export function RecentAlerts() {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {data?.data.map((alert) => (
+                    {data?.alerts?.map((alert) => (
                         <div
                             key={alert.alert_id}
                             className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
@@ -35,7 +35,11 @@ export function RecentAlerts() {
                                     <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-sm font-medium leading-none">{alert.error_pattern}</p>
+                                    <p className="text-sm font-medium leading-none">
+                                        {alert.error_pattern.length > 50
+                                            ? `${alert.error_pattern.substring(0, 50)}...`
+                                            : alert.error_pattern}
+                                    </p>
                                     <p className="text-xs text-muted-foreground">
                                         {alert.entity_id} • {formatDistanceToNow(new Date(alert.created_at), { addSuffix: true })}
                                     </p>
@@ -57,7 +61,7 @@ export function RecentAlerts() {
                             </Badge>
                         </div>
                     ))}
-                    {(!data?.data || data.data.length === 0) && (
+                    {(!data?.alerts || data.alerts.length === 0) && (
                         <div className="text-center text-muted-foreground py-4">No recent alerts</div>
                     )}
                 </div>
